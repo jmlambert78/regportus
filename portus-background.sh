@@ -2,11 +2,11 @@
 # openssl rand -hex 64 -> keybase
 
 # variables
-CA_CERTIFICATE="rootCA.suse.crt"
-CERTIFICATE="wildcard.suse.crt"
-KEY="wildcard.suse.key"
-FQDN="sles15sp1-1.suse"
-RUNTIME="podman"
+CA_CERTIFICATE="rootCA.suse.site.crt"
+CERTIFICATE="wildcard.suse.site.crt"
+KEY="wildcard.suse.site.key"
+FQDN="regminint.suse.site"
+RUNTIME="docker"
 
 ##############################
 $RUNTIME stop portus-background
@@ -14,6 +14,8 @@ $RUNTIME rm portus-background
 $RUNTIME run -d \
 --restart=always \
 --name portus-background \
+--add-host regminint:10.228.204.132 \
+--add-host regminint.suse.site:10.228.204.132 \
 -v /data/certificates/:/certificates:ro \
 -v /data/certificates/$CA_CERTIFICATE:/etc/pki/trust/anchors/rootCA.crt:ro \
 -e CCONFIG_PREFIX=PORTUS \
@@ -25,7 +27,7 @@ $RUNTIME run -d \
 -e PORTUS_DB_PASSWORD=suse1234 \
 -e PORTUS_DB_POOL=5 \
 -e PORTUS_PASSWORD="supercomplexpassword!" \
--e PORTUS_CHECK_SSL_USAGE_ENABLED=true \
+-e PORTUS_CHECK_SSL_USAGE_ENABLED=false \
 -e PORTUS_SECRET_KEY_BASE=fe4ead79e6c48fa8cf2234ff31964a9997459ced70effd28fa5b71c0c3a18e46f4bc013d9657ea09ad07397f65a626c48d5f16804022d351724cf463b6da144f \
 -e PORTUS_KEY_PATH=/certificates/$KEY \
 -e PORTUS_PUMA_TLS_KEY=/certificates/$KEY \

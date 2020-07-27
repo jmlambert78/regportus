@@ -2,7 +2,7 @@
 
 # variables
 
-RUNTIME="podman"
+RUNTIME="docker"
 
 #####################
 
@@ -11,6 +11,8 @@ $RUNTIME rm mysql
 $RUNTIME run -d \
 --restart=always \
 --name mysql \
+--add-host regminint:10.228.204.132 \
+--add-host regminint.suse.site:10.228.204.132 \
 -p 3306:3306 \
 -v /var/lib/mysql:/var/lib/mysql \
 -e MYSQL_DATABASE="portus_production" \
